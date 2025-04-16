@@ -26,11 +26,12 @@ def summarize_text(text, chunk_size=3000, max_chunks=3):
     for chunk in chunks:
         response = client.chat.completions.create(
             model="meta-llama/llama-4-scout-17b-16e-instruct",
-            messages=[{"role": "user", "content": f"Summarize this:\n\n{chunk}"}]
+            messages=[{"role": "user", "content": f"Summarize this in 1 sentence in English:\n\n{chunk}"}]
         )
         summaries.append(response.choices[0].message.content.strip())
 
-    return "\n\n".join(summaries)
+    return " ".join(summaries).replace("\n", " ")
+
 
 def llm_image(image_data):
     response = client.chat.completions.create(
@@ -38,7 +39,7 @@ def llm_image(image_data):
         messages=[{
         "role": "user",
         "content":[
-            {"type": "text", "text": "Describe this image."},
+            {"type": "text", "text": "Describe this image in one sentence."},
             {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64," + image_data}}
         ]
     }]     
